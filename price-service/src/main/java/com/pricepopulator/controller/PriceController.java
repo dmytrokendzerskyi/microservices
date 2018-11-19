@@ -34,6 +34,7 @@ public class PriceController {
     @GetMapping(value = "/{id}" , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Price> getPriceById(@PathVariable("id") final Long id){
         Price price = prices.stream().filter(pr -> pr.getId().equals(id)).findFirst().get();
+        System.out.println("Second Service");
         return ResponseEntity.ok(price);
     }
 
