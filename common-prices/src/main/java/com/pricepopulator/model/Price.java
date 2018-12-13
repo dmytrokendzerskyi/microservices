@@ -1,7 +1,10 @@
 package com.pricepopulator.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Price {
 
+    @JsonIgnore
     private Long id;
     private Integer price;
     private String name;
