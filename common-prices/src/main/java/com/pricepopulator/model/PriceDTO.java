@@ -2,20 +2,27 @@ package com.pricepopulator.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Price {
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+public class PriceDTO {
 
     @JsonIgnore
     private Long id;
+    @Min(10)
+    @Max(1000000000)
     private Integer price;
+    @NotNull
     private String name;
 
-    public Price(Long id, Integer price, String name) {
+    public PriceDTO(Long id, Integer price, String name) {
         this.id = id;
         this.price = price;
         this.name = name;
     }
 
-    public Price() {
+    public PriceDTO() {
     }
 
     public Long getId() {
