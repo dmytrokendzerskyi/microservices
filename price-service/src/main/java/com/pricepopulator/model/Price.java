@@ -23,6 +23,15 @@ public class Price {
     public Price() {
     }
 
+    public Price(Integer price, String name) {
+        this.price = price;
+        this.name = name;
+    }
+
+    public Price(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

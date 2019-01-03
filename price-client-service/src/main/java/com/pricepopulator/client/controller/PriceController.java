@@ -36,4 +36,10 @@ public class PriceController {
     public ResponseEntity updatePrice(@Valid @RequestBody PriceDTO price, @PathVariable("id") Long id){
         return priceServiceRestTemplateClient.updatePrice(price, id);
     }
+
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity deletePrice(@PathVariable("id") Long id){
+        return priceServiceRestTemplateClient.deletePrice(id);
+    }
+    
 }

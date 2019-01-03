@@ -42,7 +42,7 @@ public class PriceServiceRestTemplateClient {
         return responseEntity;
     }
 
-    public ResponseEntity updatePrice(PriceDTO price , Long id){
+    public ResponseEntity updatePrice(PriceDTO price, Long id){
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity requestEntity = new HttpEntity(price,httpHeaders);
@@ -52,6 +52,12 @@ public class PriceServiceRestTemplateClient {
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(url+"/{id}",
                 HttpMethod.PUT, requestEntity, String.class, params);
+        return responseEntity;
+    }
+
+    public ResponseEntity deletePrice(Long id){
+        ResponseEntity responseEntity = restTemplate.exchange(url+"/{id}",
+                HttpMethod.DELETE, null, String.class, id);
         return responseEntity;
     }
 
