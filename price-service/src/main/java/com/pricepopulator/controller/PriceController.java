@@ -48,7 +48,9 @@ public class PriceController {
         Price createdPrice = priceService.create(price);
         Resource<Price> priceResource = new Resource<Price>(createdPrice);
         ControllerLinkBuilder linkBuilder = linkTo(methodOn(this.getClass()).getAllPrices());
+        ControllerLinkBuilder selfLinkBuilder = linkTo(methodOn(this.getClass()).getPrice(createdPrice.getId()));
         priceResource.add(linkBuilder.withRel(PRICES_REL));
+        priceResource.add(selfLinkBuilder.withSelfRel());
         return priceResource;
     }
 
@@ -57,7 +59,9 @@ public class PriceController {
         Price updatedPrice = priceService.update(price, id);
         Resource<Price> priceResource = new Resource<Price>(updatedPrice);
         ControllerLinkBuilder linkBuilder = linkTo(methodOn(this.getClass()).getAllPrices());
+        ControllerLinkBuilder selfLinkBuilder = linkTo(methodOn(this.getClass()).getPrice(id));
         priceResource.add(linkBuilder.withRel(PRICES_REL));
+        priceResource.add(selfLinkBuilder.withSelfRel());
         return priceResource;
     }
 
