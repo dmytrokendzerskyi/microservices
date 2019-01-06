@@ -2,6 +2,7 @@ package com.pricepopulator.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pricepopulator.exception.ErrorBuilder;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
@@ -55,4 +56,8 @@ public class RabbitConfiguration {
         return new Gson();
     }
 
+    @Bean
+    ErrorBuilder errorBuilder(){
+        return new ErrorBuilder();
+    }
 }

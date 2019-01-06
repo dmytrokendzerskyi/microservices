@@ -1,6 +1,9 @@
 package com.pricepopulator.service;
 
 import com.pricepopulator.config.QueueProducer;
+import com.pricepopulator.exception.Error;
+import com.pricepopulator.exception.PriceNotFoundException;
+import com.pricepopulator.exception.PriceNotFoundWarning;
 import com.pricepopulator.model.Price;
 import com.pricepopulator.model.PriceDTO;
 import com.pricepopulator.model.PriceMessage;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PriceServiceImpl implements PriceService{
@@ -25,7 +29,8 @@ public class PriceServiceImpl implements PriceService{
 
     @Override
     public Price getPrice(Long id) {
-        return priceRepository.findOne(id);
+        return Optional.ofNullable(priceRepository.findOne(id)).orElseThrow(() ->
+                new PriceNotFoundException(Error.ErrorMessage.NOT_FOUND_ERROR_MESSAGE.concat(id.toString())));
     }
 
     @Override
@@ -37,7 +42,8 @@ public class PriceServiceImpl implements PriceService{
 
     @Override
     public Price update(PriceDTO price, Long id) {
-        Price updatedPrice = priceRepository.findOne(id);
+        Price updatedPrice = Optional.ofNullable(priceRepository.findOne(id)).orElseThrow(() ->
+                new PriceNotFoundException(Error.ErrorMessage.NOT_FOUND_ERROR_MESSAGE.concat(id.toString())));
         updatedPrice.setName(price.getName());
         updatedPrice.setPrice(price.getPrice());
         priceRepository.saveAndFlush(updatedPrice);
@@ -47,8 +53,10 @@ public class PriceServiceImpl implements PriceService{
 
     @Override
     public void delete(Long id) {
-        priceRepository.delete(id);
-        queueProducer.produce(new PriceMessage(PriceMessage.MessageType.DELETE, new Price(id)));
+        Price price = Optional.ofNullable(priceRepository.findOne(id)).orElseThrow(() ->
+                new PriceNotFoundWarning(Error.ErrorMessage.NOT_FOUND_ERROR_MESSAGE.concat(id.toString())));
+        priceRepository.delete(price);
+        queueProducer.produce(new PriceMessage(PriceMessage.MessageType.DELETE, price));
     }
 
 }

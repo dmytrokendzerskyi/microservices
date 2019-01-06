@@ -41,5 +41,5 @@ public class PriceController {
     public ResponseEntity deletePrice(@PathVariable("id") Long id){
         return priceServiceRestTemplateClient.deletePrice(id);
     }
-    
+
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -22,23 +24,37 @@ public class PriceServiceRestTemplateClient {
     private String url;
 
     public ResponseEntity getAllPrices(){
-        ResponseEntity responseEntity = restTemplate.exchange(url,
-                HttpMethod.GET, null, String.class);
-        return responseEntity;
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url,
+                    HttpMethod.GET, null, String.class);
+        }catch (HttpStatusCodeException e){
+            responseEntity = new ResponseEntity(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+            return responseEntity;
     }
 
     public ResponseEntity getPriceById(Long id){
-        ResponseEntity responseEntity = restTemplate.exchange(url+"/{id}",
-                HttpMethod.GET, null, String.class, id);
-        return responseEntity;
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url + "/{id}",
+                    HttpMethod.GET, null, String.class, id);
+        }catch (HttpStatusCodeException e){
+            responseEntity = new ResponseEntity(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+            return responseEntity;
     }
 
     public ResponseEntity createPrice(PriceDTO price){
+        ResponseEntity responseEntity;
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity requestEntity = new HttpEntity(price,httpHeaders);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url,
-                requestEntity, String.class);
+        try{
+            responseEntity = restTemplate.postForEntity(url, requestEntity, String.class);
+        }catch (HttpStatusCodeException e){
+            responseEntity = new ResponseEntity(e.getResponseBodyAsString(), e.getStatusCode());
+        }
         return responseEntity;
     }
 
@@ -49,15 +65,24 @@ public class PriceServiceRestTemplateClient {
 
         Map<String, String> params = new HashMap<>();
         params.put("id", id.toString());
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url+"/{id}",
-                HttpMethod.PUT, requestEntity, String.class, params);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url + "/{id}",
+                    HttpMethod.PUT, requestEntity, String.class, params);
+        }catch (HttpStatusCodeException e){
+            responseEntity = new ResponseEntity(e.getResponseBodyAsString(), e.getStatusCode());
+        }
         return responseEntity;
     }
 
     public ResponseEntity deletePrice(Long id){
-        ResponseEntity responseEntity = restTemplate.exchange(url+"/{id}",
+        ResponseEntity responseEntity;
+        try{
+            responseEntity = restTemplate.exchange(url+"/{id}",
                 HttpMethod.DELETE, null, String.class, id);
+        }catch (HttpStatusCodeException e){
+            responseEntity = new ResponseEntity(e.getResponseBodyAsString(), e.getStatusCode());
+        }
         return responseEntity;
     }
 
