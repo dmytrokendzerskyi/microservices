@@ -1,17 +1,15 @@
 package com.pricepopulator.client.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.pricepopulator.model.PriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -34,6 +32,7 @@ public class PriceServiceRestTemplateClient {
             return responseEntity;
     }
 
+    @HystrixCommand(fallbackMethod = "getDefaultPrice")
     public ResponseEntity getPriceById(Long id){
         ResponseEntity responseEntity;
         try {
@@ -43,6 +42,13 @@ public class PriceServiceRestTemplateClient {
             responseEntity = new ResponseEntity(e.getResponseBodyAsString(), e.getStatusCode());
         }
             return responseEntity;
+    }
+
+    private ResponseEntity getDefaultPrice(Long id){
+        PriceDTO priceDTO = new PriceDTO();
+        priceDTO.setName("car");
+        priceDTO.setPrice(20000);
+        return ResponseEntity.ok(priceDTO);
     }
 
     public ResponseEntity createPrice(PriceDTO price){

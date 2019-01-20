@@ -1,6 +1,6 @@
 package com.pricepopulator.service;
 
-import com.pricepopulator.config.QueueProducer;
+import com.pricepopulator.rabbitmq.QueueProducer;
 import com.pricepopulator.exception.Error;
 import com.pricepopulator.exception.PriceNotFoundException;
 import com.pricepopulator.exception.PriceNotFoundWarning;

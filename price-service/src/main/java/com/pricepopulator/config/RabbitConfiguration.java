@@ -1,14 +1,11 @@
 package com.pricepopulator.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.pricepopulator.exception.ErrorBuilder;
+import com.pricepopulator.rabbitmq.QueueConsumer;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.listener.BlockingQueueConsumer;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,13 +48,4 @@ public class RabbitConfiguration {
         return new MessageListenerAdapter(consumer, LISTENER_METHOD);
     }
 
-    @Bean
-    Gson gson(){
-        return new Gson();
-    }
-
-    @Bean
-    ErrorBuilder errorBuilder(){
-        return new ErrorBuilder();
-    }
 }

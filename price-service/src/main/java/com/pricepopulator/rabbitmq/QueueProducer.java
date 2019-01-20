@@ -1,4 +1,4 @@
-package com.pricepopulator.config;
+package com.pricepopulator.rabbitmq;
 
 import com.google.gson.Gson;
 import com.pricepopulator.model.Price;
